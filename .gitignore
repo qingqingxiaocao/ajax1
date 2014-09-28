@@ -1,12 +1,65 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+///////ajax.jsp
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		#msg{
+			color:red;
+		}
+	</style>
+</head>
+<body>
+	<input type="text" id="txt"><span id="msg"></span>
+	<button type="btn" id="btn">Button</button>
+	
+	<script type="text/javascript">
+		(function(){
+			
+			var createXmlHttp = function(){//创建一个引擎xmlHttp
+				var xmlHttp = null;
+				if(window.ActiveXObject){
+					xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}else{
+					xmlHttp = new XMLHttpRequest();
+				}
+				return xmlHttp;
+			};
+			
+			document.getElementById("txt").onblur = function(){
+				
+				var name = document.getElementById("txt").value;
+				
+				var xmlHttp = createXmlHttp();
+				//xmlHttp.open("get","/ajax.do?name="+encodeURIComponent(name));//向服务器设置一些东西
+				xmlHttp.open("post","/ajax.do");//向服务器设置一些东西
+				xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				
+			 	xmlHttp.onreadystatechange = function(){
+			 		var stat = xmlHttp.readyState;
+			 		if(stat == 4){
+			 			if(xmlHttp.status == 200){
+			 				//获取服务器返回的字符串
+			 				var result = xmlHttp.responseText;
+			 				var msg = document.getElementById("msg");
+			 				
+			 				if(result=="yes"){
+			 					msg.innerHTML = "用户名可以用";
+			 				}else if(result =="no"){
+			 					msg.innerHTML = "用户名已被占用";
+			 				}
+			 			}else{
+				 			alert("服务器忙：" + xmlHttp.status);
+				 		}
+			 		}
+			 	}
+				xmlHttp.send("name=" + name+"&pwd=123");//发送请求
+			}
+		})();
+	
+	</script>
+</body>
+</html>
