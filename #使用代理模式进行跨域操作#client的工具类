@@ -1,0 +1,61 @@
+package com.kaishengit.web.http;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+public class HttpUtil {
+	public static String sendRequest(String url,String charset){
+		
+		String result = null;
+		CloseableHttpClient client = null;
+		CloseableHttpResponse resp = null;
+		try {
+			//创建一个客户端
+			client = HttpClients.createDefault();
+			//指定是get提交
+			HttpGet get = new HttpGet(url);
+			//执行过之后返回的结果
+			resp = client.execute(get);
+			//获取http的状态吗
+			int httpCode = resp.getStatusLine().getStatusCode();
+			if(httpCode == 200){
+				//resp.getEntity()代表拿到一个相应的对象
+				InputStream in = resp.getEntity().getContent();
+				//把一个输入流变成一个字符串
+				result = IOUtils.toString(in,charset);
+			}else{
+				System.out.println("服务器错误"+httpCode);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			try {
+				if(resp != null){
+					resp.close();
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}finally{
+				try {
+					if(client != null){
+						client.close();
+					}
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	
+		return result;
+		
+	}
+
+}
