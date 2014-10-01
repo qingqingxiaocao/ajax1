@@ -1,0 +1,31 @@
+package com.kaishengit.web;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.kaishengit.web.http.HttpUtil;
+
+@WebServlet("/youdao.json")
+public class YouDaoServlet2 extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		String word = request.getParameter("word");
+		String url= "http://fanyi.youdao.com/openapi.do?keyfrom=abccbait&key=1258656107&type=data&doctype=json&version=1.1&q="+word;
+		String result = HttpUtil.sendRequest(url, "UTF-8");
+		response.setContentType("application/json;charset=UTF-8");
+		
+		PrintWriter out = response.getWriter();
+		out.print(result);
+		out.flush();
+		out.close();
+	}
+
+}
