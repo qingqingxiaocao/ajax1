@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<input type="text" id="word">
+	<button id="btn">Query</button>
+	<div id="result"></div>
+	
+	<script type="text/javascript" src="http://cdn.staticfile.org/jquery/1.10.1/jquery.min.js"></script>
+	
+	<script type="text/javascript">
+		$(function(){
+			$("#btn").click(function(){
+				var word = $("#word").val();
+				$.getJSON("http://fanyi.youdao.com/openapi.do?keyfrom=kaishengit&key=1587754017&type=data&doctype=jsonp&callback=?&version=1.1",{"q":word},
+						function(data){
+						var result = data.translation[0];
+						$("#result").text(result);
+						});
+			});
+			
+		});
+	</script>
+</body>
+</html>
