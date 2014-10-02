@@ -56,6 +56,8 @@
 					
 					ul.appendChild(li); 
 				}*/
+				//用jquery追加元素
+				$("#result").append($("<li>").append($("<span>").text(id)).append($("<name>").text(name)).append($("<strong>").html($("<age>").text(age))));
 				
 			});
 		});
